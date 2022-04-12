@@ -37,14 +37,14 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          livenessProbe:
+            httpGet:
+              path: /plugins/Morpheus/images/logo.png
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /plugins/Morpheus/images/logo.png
+              port: http
           resources:
             {{- toYaml .Values.matomoNginx.resources | nindent 12 }}
           volumeMounts:
@@ -77,17 +77,19 @@ spec:
                   name: {{ include "matomo.mariadb.fullname" . }}
                   key: "mariadb-password"
           ports:
-            - name: http
+            - name: fastcgi
               containerPort: 9000
               protocol: TCP
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          livenessProbe:
+            tcpSocket:
+              port: fastcgi
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: fastcgi
+            initialDelaySeconds: 5
+            periodSeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:

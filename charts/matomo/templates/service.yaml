@@ -11,5 +11,9 @@ spec:
       targetPort: http
       protocol: TCP
       name: http
+    - port: 9000
+      targetPort: fastcgi
+      protocol: TCP
+      name: fastcgi
   selector:
     {{- include "matomo.selectorLabels" . | nindent 4 }}
